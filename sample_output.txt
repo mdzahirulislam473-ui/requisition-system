@@ -1,0 +1,120 @@
+STEP 1: Submitting requisitions
+
+Submitted 10001 for John Paul: $450 -> Approved
+Submitted 10002 for Catlin White: $490 -> Approved
+Submitted 10003 for Tracy Brown: $1000 -> Pending
+Submitted 10004 for Emma Wellington: $3500 -> Pending
+Submitted 10005 for Liam Smith: $500 -> Pending
+
+STEP 2: Requisitions and statistics before manager response
+
+========================================
+Displaying All Requisitions
+========================================
+Date: 03/04/2024
+Requisition ID: 10001
+Staff ID: FN19
+Staff Name: John Paul
+Total: $450
+Status: Approved
+Approval Reference Number: FN19001
+
+Date: 03/05/2024
+Requisition ID: 10002
+Staff ID: FN02
+Staff Name: Catlin White
+Total: $490
+Status: Approved
+Approval Reference Number: FN02002
+
+Date: 05/04/2024
+Requisition ID: 10003
+Staff ID: FN20
+Staff Name: Tracy Brown
+Total: $1000
+Status: Pending
+Approval Reference Number: Not available
+
+Date: 07/05/2024
+Requisition ID: 10004
+Staff ID: FN15
+Staff Name: Emma Wellington
+Total: $3500
+Status: Pending
+Approval Reference Number: Not available
+
+Date: 10/05/2024
+Requisition ID: 10005
+Staff ID: FN07
+Staff Name: Liam Smith
+Total: $500
+Status: Pending
+Approval Reference Number: Not available
+
+Displaying the Requisition Statistics
+The total number of requisitions submitted: 5
+The total number of approved requisitions: 2
+The total number of pending requisitions: 3
+The total number of not approved requisitions: 0
+
+STEP 3: Manager responds to requisitions of $500 or more
+
+Requisition 10001 is already 'Approved'. Only pending requisitions can be changed.
+
+STEP 4: Requisitions and statistics after manager response
+
+========================================
+Displaying All Requisitions
+========================================
+Date: 03/04/2024
+Requisition ID: 10001
+Staff ID: FN19
+Staff Name: John Paul
+Total: $450
+Status: Approved
+Approval Reference Number: FN19001
+
+Date: 03/05/2024
+Requisition ID: 10002
+Staff ID: FN02
+Staff Name: Catlin White
+Total: $490
+Status: Approved
+Approval Reference Number: FN02002
+
+Date: 05/04/2024
+Requisition ID: 10003
+Staff ID: FN20
+Staff Name: Tracy Brown
+Total: $1000
+Status: Pending
+Approval Reference Number: Not available
+
+Date: 07/05/2024
+Requisition ID: 10004
+Staff ID: FN15
+Staff Name: Emma Wellington
+Total: $3500
+Status: Not approved
+Approval Reference Number: Not available
+
+Date: 10/05/2024
+Requisition ID: 10005
+Staff ID: FN07
+Staff Name: Liam Smith
+Total: $500
+Status: Approved
+Approval Reference Number: FN07005
+
+Displaying the Requisition Statistics
+The total number of requisitions submitted: 5
+The total number of approved requisitions: 3
+The total number of pending requisitions: 1
+The total number of not approved requisitions: 1
+
+STEP 5: Input validation checks
+
+Empty item list: caught error -> A requisition must contain at least one item.
+Negative cost: caught error -> Cost for 'Pen' cannot be negative.
+Text as cost: caught error -> Cost for 'Pen' must be a number.
+Bad date: caught error -> Invalid date '2024-13-40'. Use DD/MM/YYYY.

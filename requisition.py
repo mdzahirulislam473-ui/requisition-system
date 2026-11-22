@@ -126,3 +126,92 @@ class Requisition:
             self.status = STATUS_PENDING
             self.approval_reference = None
         return self.status
+
+    # ------------------------------------------------------------------
+    # Task 1.5d  Manager response
+    # ------------------------------------------------------------------
+    def respond_requisition(self, decision):
+        """
+        Manager responds to a PENDING requisition.
+        decision: "approved", "not approved" or "pending" (leave as is).
+        """
+        if self.status != STATUS_PENDING:
+            print(f"Requisition {self.requisition_id} is already "
+                  f"'{self.status}'. Only pending requisitions can be changed.")
+            return self.status
+
+        decision = str(decision).strip().lower()
+        if decision == "approved":
+            self.status = STATUS_APPROVED
+            self.approval_reference = self._generate_reference()
+        elif decision == "not approved":
+            self.status = STATUS_NOT_APPROVED
+            self.approval_reference = None
+        elif decision == "pending":
+            pass  # manager chose to leave it pending
+        else:
+            raise ValueError("Decision must be 'approved', 'not approved' or 'pending'.")
+        return self.status
+
+    # ------------------------------------------------------------------
+    # Task 1.5e  Display
+    # ------------------------------------------------------------------
+    def display_requisition(self):
+        """Print the details of this requisition."""
+        reference = self.approval_reference or "Not available"
+        print(f"Date: {self.date}")
+        print(f"Requisition ID: {self.requisition_id}")
+        print(f"Staff ID: {self.staff_id}")
+        print(f"Staff Name: {self.staff_name}")
+        print(f"Total: ${self.format_money(self.total)}")
+        print(f"Status: {self.status}")
+        print(f"Approval Reference Number: {reference}")
+        print()
+
+    @classmethod
+    def display_requisitions(cls):
+        """Print information for all requisition objects."""
+        print("=" * 40)
+        print("Displaying All Requisitions")
+        print("=" * 40)
+        if not cls._all_requisitions:
+            print("No requisitions have been submitted.\n")
+            return
+        for requisition in cls._all_requisitions:
+            requisition.display_requisition()
+
+    # ------------------------------------------------------------------
+    # Task 1.5f  Statistics
+    # ------------------------------------------------------------------
+    @classmethod
+    def requisition_statistics(cls, show=True):
+        """Count requisitions by status, print them and return a dict."""
+        statuses = [r.status for r in cls._all_requisitions]
+        stats = {
+            "submitted": len(statuses),
+            "approved": statuses.count(STATUS_APPROVED),
+            "pending": statuses.count(STATUS_PENDING),
+            "not_approved": statuses.count(STATUS_NOT_APPROVED),
+        }
+        if show:
+            print("Displaying the Requisition Statistics")
+            print(f"The total number of requisitions submitted: {stats['submitted']}")
+            print(f"The total number of approved requisitions: {stats['approved']}")
+            print(f"The total number of pending requisitions: {stats['pending']}")
+            print(f"The total number of not approved requisitions: {stats['not_approved']}")
+            print()
+        return stats
+
+    @classmethod
+    def find(cls, requisition_id):
+        """Return a requisition by its ID, or None if not found."""
+        for requisition in cls._all_requisitions:
+            if requisition.requisition_id == requisition_id:
+                return requisition
+        return None
+
+    @classmethod
+    def reset(cls):
+        """Clear all records (used by the tests)."""
+        cls._all_requisitions = []
+        cls._next_id = STARTING_REQUISITION_ID
