@@ -62,3 +62,67 @@ class Requisition:
         except (ValueError, TypeError):
             raise ValueError(f"Invalid date '{date}'. Use DD/MM/YYYY.")
         return date
+
+    @staticmethod
+    def format_money(amount):
+        """Show 450 as '450' and 499.5 as '499.50' (no scientific notation)."""
+        if float(amount).is_integer():
+            return f"{int(amount)}"
+        return f"{amount:.2f}"
+
+    def _generate_reference(self):
+        """Approval reference = Staff ID + last 3 digits of requisition ID."""
+        return f"{self.staff_id}{str(self.requisition_id)[-3:]}"
+
+    # ------------------------------------------------------------------
+    # Task 1.5a  Data capture and computation
+    # ------------------------------------------------------------------
+    def add_requisition(self, items):
+        """
+        Accept a list of (item_name, cost) pairs, store them and
+        return the requisition total.
+        """
+        if not items:
+            raise ValueError("A requisition must contain at least one item.")
+
+        clean_items = []   # validate everything first, then save
+        for item in items:
+            if len(item) != 2:
+                raise ValueError(f"Item {item} must be (name, cost).")
+            name, cost = item
+            name = str(name).strip()
+            if not name:
+                raise ValueError("Item name cannot be empty.")
+            try:
+                cost = float(cost)
+            except (TypeError, ValueError):
+                raise ValueError(f"Cost for '{name}' must be a number.")
+            if cost < 0:
+                raise ValueError(f"Cost for '{name}' cannot be negative.")
+            clean_items.append((name, cost))
+
+        self.items.extend(clean_items)
+        self.total = self.requisition_details()
+        return self.total
+
+    def requisition_details(self):
+        """Calculate and return the total cost of all items."""
+        return round(sum(cost for _, cost in self.items), 2)
+
+    # ------------------------------------------------------------------
+    # Task 1.5b  Decision-making
+    # ------------------------------------------------------------------
+    def approve_requisition(self):
+        """
+        Auto-decide the status from the total:
+          total < $500  -> Approved (reference number created)
+          total >= $500 -> Pending (waits for a manager)
+        """
+        self.total = self.requisition_details()
+        if self.total < AUTO_APPROVAL_LIMIT:
+            self.status = STATUS_APPROVED
+            self.approval_reference = self._generate_reference()
+        else:
+            self.status = STATUS_PENDING
+            self.approval_reference = None
+        return self.status
